@@ -1,0 +1,10 @@
+
+venv/
+env/
+*.env
+*.venv/
+# Ignore any other generated files or directories
+*/build/
+*/dist/
+.idea/
+.idea
