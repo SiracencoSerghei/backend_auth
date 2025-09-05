@@ -40,3 +40,9 @@ curl -X POST http://localhost:8000/signup \
 -H "Content-Type: application/json" \
 -d '{"email":"test@example.com","password":"1234"}'
 ```
+
+## 6.
+
+```
+docker exec -it backend_auth-db psql -U postgres -d fastapi_db
+```

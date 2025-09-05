@@ -12,11 +12,12 @@ from auth import (
 )
 from jose import jwt, JWTError
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-
 from fastapi.middleware.cors import CORSMiddleware
 
-Base.metadata.create_all(bind=engine)
+# Створюємо FastAPI додаток
+app = FastAPI()
 
+# Підключаємо middleware
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5174"],
@@ -25,7 +26,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app = FastAPI()
+Base.metadata.create_all(bind=engine)
+
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
@@ -37,7 +39,7 @@ def get_db():
         db.close()
 
 
-# Реєстрація користувача
+# --- Тут підключаємо маршрути ---
 @app.post("/signup", response_model=UserResponse)
 def signup(user: UserCreate, db: Session = Depends(get_db)):
     db_user = db.query(User).filter(User.email == user.email).first()
@@ -51,7 +53,6 @@ def signup(user: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-# Логін користувача
 @app.post("/login", response_model=Token)
 def login(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
@@ -63,7 +64,6 @@ def login(
     return {"access_token": token, "token_type": "bearer"}
 
 
-# Захищений маршрут
 def get_current_user(
     token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
 ):
