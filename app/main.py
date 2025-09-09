@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal, engine, Base
 from models import User
 from schemas import UserCreate, UserResponse, Token
+from datetime import datetime, timedelta
 from auth import (
     hash_password,
     verify_password,
